@@ -1,5 +1,5 @@
 #include <iostream>
-#include <type_traits>
+#include <string>
 
 using namespace std;
 
@@ -11,13 +11,23 @@ struct ListNode {
   ListNode(int x) : val(x), next(nullptr) {}
   ListNode(int x, ListNode *next) : val(x), next(next) {}
 
-  void display() {
+  string display() {
     ListNode *cur = this;
+    string msg;
     while (cur != nullptr) {
-      cout << cur->val << "->";
+      msg += (to_string(cur->val) + "->");
       cur = cur->next;
     }
-    cout << "NULL" << endl;
+    msg.append("NULL");
+    return msg;
+  }
+
+  void append(int val) {
+    ListNode *cur = this, *node = new ListNode(val);
+    while (cur->next != nullptr) {
+      cur = cur->next;
+    }
+    cur->next = node;
   }
 };
 
@@ -34,18 +44,15 @@ public:
     }
     ListNode *slow = head, *fast = head->next;
     while (fast != nullptr) {
-      cout << "fast: " << fast->val << endl;
-      cout << "slow: " << slow->val << endl;
+      string msg(20, '-');
       // c1
       if (fast->val != slow->val) {
-        cout << "condition1" << endl;
         slow->next = fast;
         slow = fast;
         fast = fast->next;
       }
       // c2
       else {
-        cout << "condition2" << endl;
         fast = fast->next;
       }
     }
@@ -55,11 +62,14 @@ public:
 };
 
 int main(int argc, char *argv[]) {
-  ListNode *head = new ListNode(
-      1, new ListNode(
-             1, new ListNode(2, new ListNode(3, new ListNode(3, nullptr)))));
-  head->display();
+  ListNode *head = new ListNode(1);
+  head->append(1);
+  head->append(2);
+  head->append(3);
+  head->append(3);
+
   Solution sol;
-  sol.deleteDuplicates(head)->display();
+  sol.deleteDuplicates(head);
+
   return 0;
 }
