@@ -1,35 +1,8 @@
+#include "src/LinkedList.hpp"
 #include <iostream>
 #include <string>
 
 using namespace std;
-
-struct ListNode {
-  int val;
-  ListNode *next;
-
-  ListNode() : val(0), next(nullptr) {}
-  ListNode(int x) : val(x), next(nullptr) {}
-  ListNode(int x, ListNode *next) : val(x), next(next) {}
-
-  string display() {
-    ListNode *cur = this;
-    string msg;
-    while (cur != nullptr) {
-      msg += (to_string(cur->val) + "->");
-      cur = cur->next;
-    }
-    msg.append("NULL");
-    return msg;
-  }
-
-  void append(int val) {
-    ListNode *cur = this, *node = new ListNode(val);
-    while (cur->next != nullptr) {
-      cur = cur->next;
-    }
-    cur->next = node;
-  }
-};
 
 class Solution {
 public:
