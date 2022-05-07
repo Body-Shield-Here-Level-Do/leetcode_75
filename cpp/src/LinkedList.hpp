@@ -1,4 +1,6 @@
+#pragma once
 #include <string>
+
 #ifndef LINKEDLIST_HPP
 #define LINKEDLIST_HPP
 
@@ -31,19 +33,18 @@ public:
     cur->next = node;
   }
 
-  void insert(int index, int val) {
+  ListNode *insert(int index, int val) {
     int idx = 0;
     ListNode *cur = this, *node = new ListNode(val);
     while (cur != nullptr) {
       if (idx == index) {
-        ListNode *temp = cur->next;
-        node->next = temp;
-        cur->next = node;
-        break;
+        node->next = cur;
+        return node;
       }
       cur = cur->next;
       idx++;
     }
+    return cur;
   }
 };
 
