@@ -46,7 +46,9 @@ public:
 };
 
 int main(int argc, char *argv[]) {
+
   LRUCache *lru = new LRUCache(2);
+
   lru->put(1, 1);
   cout << "加入(1, 1) 後 lru_list 大小：\t" << lru->lru_list.size() << endl;
   lru->put(2, 2);
@@ -54,5 +56,6 @@ int main(int argc, char *argv[]) {
   cout << "取得 key 為 1 的 value：\t" << lru->get(1) << endl;
   lru->put(3, 3);
   cout << "加入(3, 3) 後 lru_list 大小：\t" << lru->lru_list.size() << endl;
+
   return 0;
 }
