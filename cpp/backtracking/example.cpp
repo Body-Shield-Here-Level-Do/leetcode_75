@@ -39,27 +39,15 @@ public:
 
   void attack_range(const vector<string> &board, int row, int col) {
     vector<string> choice = board;
-    // 向左
-    for (int i = row; i >= 0; i--) {
-      choice[i][col] = (choice[i][col] == 'Q' && i != row) ? 'q' : 'x';
+    // 90 degree
+    for (int i = 0; i < row; i++) {
+      choice[i][col] = (choice[i][col] == 'Q') ? 'q' : 'x';
     }
-    // 向右
-    for (int i = row; i < board.size(); i++) {
-      choice[i][col] = (choice[i][col] == 'Q' && i != row) ? 'q' : 'x';
-    }
-    // 左上
+    // 135 degree
     for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
       choice[i][j] = (choice[i][j] == 'Q' && i != row && j != col) ? 'q' : 'x';
     }
-    // 右下
-    for (int i = row, j = col; i < board.size() && j < board.size(); i++, j++) {
-      choice[i][j] = (choice[i][j] == 'Q' && i != row && j != col) ? 'q' : 'x';
-    }
-    // 左下
-    for (int i = row, j = col; i < board.size() && j >= 0; i++, j--) {
-      choice[i][j] = (choice[i][j] == 'Q' && i != row && j != col) ? 'q' : 'x';
-    }
-    // 右上
+    // 45 degree
     for (int i = row, j = col; i >= 0 && j < board.size(); i--, j++) {
       choice[i][j] = (choice[i][j] == 'Q' && i != row && j != col) ? 'q' : 'x';
     }
@@ -72,9 +60,11 @@ public:
       return;
     }
     for (int i = 0; i < n; i++) {
-      attack_range(board, row, i);
       if (is_valid(board, row, i)) {
         board[row][i] = 'Q';
+        attack_range(board, row, i);
+        cout << "row = " << row << endl;
+        cout << "col = " << i << endl;
         dfs(board, row + 1, n);
         board[row][i] = '.';
       }
