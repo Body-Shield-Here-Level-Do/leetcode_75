@@ -1,4 +1,4 @@
-#include "src/Tree.hpp"
+#include "src/Tree.h"
 #include <cstdint>
 #include <queue>
 

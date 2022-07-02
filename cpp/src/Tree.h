@@ -1,8 +1,8 @@
 #include <string>
 #include <vector>
 
-#ifndef TREE_HPP
-#define TREE_HPP
+#ifndef TREE_H_
+#define TREE_H_
 
 struct TreeNode {
   int val;
@@ -18,4 +18,4 @@ struct TreeNode {
   std::vector<std::string> inorder();
 };
 
-#endif // !TREE_HPP
+#endif // !TREE_H_
