@@ -7,19 +7,20 @@ using namespace std;
 class Solution {
 public:
   void flatten(TreeNode *root) {
-    if (root) {
-      TreeNode *temp = root->right;
-      root->right = root->left;
-      root->left = nullptr;
-      TreeNode *node = root;
-      while (node->right) {
-        node = node->right;
+    // morris traversal
+    TreeNode *cur = root;
+    while (cur != nullptr) {
+      if (cur->left != nullptr) {
+        TreeNode *runner = cur->left;
+        while (runner->right != nullptr) {
+          runner = runner->right;
+        }
+        runner->right = cur->right;
+        cur->right = cur->left;
+        cur->left = nullptr;
       }
-
-      node->right = temp;
-      flatten(root->right);
+      cur = cur->right;
     }
-    return;
   }
 };
 
