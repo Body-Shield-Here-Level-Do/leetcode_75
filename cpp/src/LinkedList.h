@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 
-#ifndef LINKEDLIST_HPP
-#define LINKEDLIST_HPP
+#ifndef LINKEDLIST_H_
+#define LINKEDLIST_H_
 
 struct ListNode {
   int val;
@@ -48,4 +48,4 @@ public:
   }
 };
 
-#endif // !LINKEDLIST_HPP
+#endif // !LINKEDLIST_H_

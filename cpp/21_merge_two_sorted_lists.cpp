@@ -1,4 +1,4 @@
-#include "src/LinkedList.hpp"
+#include "src/LinkedList.h"
 
 class Solution {
 public:
