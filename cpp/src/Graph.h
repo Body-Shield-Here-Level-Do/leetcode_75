@@ -1,5 +1,6 @@
 #pragma once
 
+#include <utility>
 #include <vector>
 
 #ifndef GRAPH_H_
@@ -13,7 +14,7 @@ public:
   Node() : val(0), neighbors(std::vector<Node *>()) {}
   Node(int _val) : val(_val), neighbors(std::vector<Node *>()) {}
   Node(int _val, std::vector<Node *> _neighbors)
-      : val(_val), neighbors(_neighbors) {}
+      : val(_val), neighbors(std::move(_neighbors)) {}
 };
 
 #endif // !GRAPH_H_

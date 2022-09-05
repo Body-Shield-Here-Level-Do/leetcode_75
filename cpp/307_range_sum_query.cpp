@@ -1,75 +1,101 @@
 #include <algorithm>
 #include <iostream>
-#include <iterator>
 #include <string>
 #include <vector>
 
 using namespace std;
 
-class NumArray {
-  int n;
-  vector<int> segmentTree;
-
-  void buildTree(vector<int> &nums, int pos, int left, int right) {
-    if (left == right) {
-      segmentTree[pos] = nums[left];
-      return;
-    }
-    int mid = (left + right) / 2;
-    buildTree(nums, 2 * pos + 1, left, mid);
-    buildTree(nums, 2 * pos + 2, mid + 1, right);
-    segmentTree[pos] = segmentTree[2 * pos + 1] + segmentTree[2 * pos + 2];
-  }
-
-  void updateUtil(int pos, int left, int right, int index, int val) {
-    if (index < left || index > right) {
-      return;
-    }
-
-    if (left == right) {
-      if (left == index) {
-        segmentTree[pos] = val;
-      }
-      return;
-    }
-    int mid = (left + right) / 2;
-    updateUtil(2 * pos + 1, left, mid, index, val);
-    updateUtil(2 * pos + 2, mid + 1, right, index, val);
-    segmentTree[pos] = segmentTree[2 * pos + 1] + segmentTree[2 * pos + 2];
-  }
-
-  int rangeUtil(int qlow, int qhigh, int low, int high, int pos) {
-    if (qlow <= low && qhigh >= high) {
-      return segmentTree[pos];
-    }
-    if (qlow > high || qhigh < low) {
-      return 0;
-    }
-    int mid = low + (high - low) / 2;
-    return rangeUtil(qlow, qhigh, low, mid, 2 * pos + 1) +
-           rangeUtil(qlow, qhigh, mid + 1, high, 2 * pos + 2);
-  }
+class FenWickTree {
+  vector<int> nums;
 
 public:
-  NumArray(vector<int> &nums) {
-    if (nums.size() > 0) {
-      n = nums.size();
-      segmentTree.resize(4 * n, 0);
-      buildTree(nums, 0, 0, n - 1);
+  FenWickTree(vector<int> &v) : nums(vector<int>(v.size() + 1, 0)) {
+    for (int i = 0; i < v.size(); i++) {
+      update(i, v[i]);
     }
   }
 
   void update(int index, int val) {
-    if (n == 0) {
-      return;
+    while (index < nums.size()) {
+      nums[index] += val;
+      index += lowbit(index);
     }
-    updateUtil(0, 0, n - 1, index, val);
+  }
+
+  int query(int a) {
+    int sum = 0;
+    while (a > 0) {
+      sum += nums[a];
+      a -= lowbit(a);
+    }
+    return sum;
+  }
+
+  int lowbit(int x) { return (x) & (-x); }
+};
+
+class SegmentTree {
+  int L, R, val;
+  SegmentTree *left{}, *right{};
+
+  void build(vector<int> &nums) {
+    if (L == R) {
+      val = nums[L];
+    } else {
+      int mid = (L + R) / 2;
+      left = new SegmentTree(nums, L, mid);
+      right = new SegmentTree(nums, mid + 1, R);
+      val = left->val + right->val;
+    }
+  }
+
+public:
+  SegmentTree(vector<int> &nums, int l, int r) : L(l), R(r) { build(nums); }
+
+  void update(int index, int new_val) {
+    if (L == R) {
+      val = new_val;
+    } else {
+      int mid = (L + R) / 2;
+      if (index <= mid) {
+        left->update(index, new_val);
+      } else {
+        right->update(index, new_val);
+      }
+      val = left->val + right->val;
+    }
+  }
+
+  int sumRange(int low, int high) {
+    if (low > high) {
+      return 0;
+    }
+    if (low == L && high == R) {
+      return val;
+    }
+    int mid = (L + R) / 2;
+    return left->sumRange(low, min(mid, high)) +
+           right->sumRange(max(low, mid + 1), high);
+  }
+};
+
+class NumArray {
+  SegmentTree *tree;
+  FenWickTree fw;
+
+public:
+  NumArray(vector<int> &nums)
+      : tree(new SegmentTree(nums, 0, nums.size() - 1)), fw(nums) {}
+
+  void update(int index, int val) {
+    tree->update(index, val);
+    // fw.update(index, val);
   }
 
   int sumRange(int left, int right) {
-    if (n == 0) {
-      return 0;
-    }
-    return rangeUtil(left, right, 0, n - 1, 0);
+    return tree->sumRange(left, right);
+    // return fw.query(right + 1) - fw.query(left);
   }
 };
+
+int main(int argc, char *argv[]) { return 0; }
